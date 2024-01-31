@@ -54,3 +54,4 @@ export const getHash = async (publicKey, privateKey, timestamp) => {
     hash.update(timestamp + privateKey + publicKey);
     return hash.digest('hex');
 }
+
