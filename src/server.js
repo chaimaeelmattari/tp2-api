@@ -1,13 +1,27 @@
+import fastify from 'fastify';
+import fastifyView from '@fastify/view';
+import handlebars from 'handlebars';
 import { getData } from './api.js';
 
-// Test avec les personnages
-const apiUrl = 'https://gateway.marvel.com/v1/public/characters?limit=5';
+const server = fastify();
 
-(async () => {
-    try {
-        const charactersData = await getData(apiUrl);
-        console.log('Characters Data:', charactersData);
-    } catch (error) {
-        console.error('Error:', error);
+server.register(fastifyView, {
+    engine: {
+        handlebars: handlebars
+    },
+    options: {
+        partials: {
+            header: '/templates/header.hbs',
+            footer: '/templates/footer.hbs'
+        }
     }
-})();
+});
+
+server.get('/', async (req, res) => {
+    const characters = await getData("https://gateway.marvel.com/v1/public/characters");
+    console.log(characters);
+    return res.view('/templates/index.hbs', {characters: characters})
+
+})
+
+server.listen({ port: 3000});

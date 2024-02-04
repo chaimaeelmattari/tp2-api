@@ -1,4 +1,6 @@
 import { createHash } from 'crypto';
+import dotenv from 'dotenv';
+dotenv.config();
 
 /**
  * Récupère les données de l'endpoint en utilisant les identifiants
@@ -9,17 +11,18 @@ import { createHash } from 'crypto';
 export const getData = async (url) => {
     // exo 3
     const timestamp = Date.now();
-    const publicKey = "507b26042b7eb8fd48ac4281919811e1";
-    const privateKey = "f7a9610f5aae980370e8375c5a40f3d4f587af91";
+    const publicKey = process.env.PUBKEY;
+    const privateKey = process.env.PRIKEY;
+
     const hash = await getHash(publicKey, privateKey, timestamp);
 
-    const apiUrl = `${url}&apikey=${publicKey}&ts=${timestamp}&hash=${hash}`;
+    const apiUrl = `${url}?apikey=${publicKey}&ts=${timestamp}&hash=${hash}&offset=100`;
 
     try {
         const response = await fetch(apiUrl);
-        const data = await response.json();
+        const datas = await response.json();
 
-        const resultsWithThumbnail = data.data.results.filter(character =>
+        const resultsWithThumbnail = datas.data.results.filter(character =>
             character.thumbnail && character.thumbnail.path !== "image_not_available"
         );
 
