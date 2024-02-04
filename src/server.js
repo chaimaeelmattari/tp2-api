@@ -1,4 +1,4 @@
-import { getData } from './api.js';  // Assurez-vous que le chemin est correct
+import { getData } from './api.js';
 
 // Test avec les personnages
 const apiUrl = 'https://gateway.marvel.com/v1/public/characters?limit=5';
